@@ -4,7 +4,7 @@
 
 import cv2
 
-#Open default webcam hence the "0"
+#Open default webcam hence the "0", if webcam then change to "1"
 #Instatiating the object capture of the VideoCapture Class
 capture = cv2.VideoCapture(0)
 

@@ -14,7 +14,8 @@ output = cv2.VideoWriter('output.mp4', fourcc, 20.0, (frame_width, frame_height)
 image_num = 0
 
 #video save folder
-SCRIPT_DIR = os.path.dirname(os.path.abspath(file))
+#SCRIPT_DIR = os.path.dirname(os.path.abspath(file))
+SCRIPT_DIR = os.getcwd()
 SAVE_FOLDER = os.path.join(SCRIPT_DIR, "saved_images")
 
 #Create folder if it doesn't exist
@@ -25,7 +26,7 @@ while True:
 
     output.write(frame)
     cv2.imshow('Camera', frame) #shows each frame
-    saved_loc = os.path.join(SAVEFOLDER, f"frame{image_num}.png")
+    saved_loc = os.path.join(SAVE_FOLDER, f"frame{image_num}.png")
     cv2.imwrite(saved_loc, frame)
     image_num += 1
 

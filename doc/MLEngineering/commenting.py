@@ -1,4 +1,4 @@
-# File: commenting.py
+# File: commenting.py 
 # Authors: Your Names Here
 # Description: Small "Hello, World!" program to demonstrate good commenting and organization of a Python source file.
 

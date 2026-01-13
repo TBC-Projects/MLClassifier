@@ -1,8 +1,8 @@
         Enrollment
-Images → FaceNet → Embeddings → Vector DB
+Images → InsightFace → Embeddings → Vector DB
 
         Inference
-Camera → FaceNet → Query Embedding
+Camera → InsightFace → Query Embedding
                      ↓
            Nearest Neighbor Search
                      ↓

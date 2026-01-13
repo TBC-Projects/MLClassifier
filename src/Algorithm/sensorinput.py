@@ -1,5 +1,8 @@
 import cv2
 import os
+import time
+
+#start_time = time.time() #captures start time of program
 
 #camera is USB 2.0
 camera = cv2.VideoCapture(0) #gets video input from USB port
@@ -12,6 +15,7 @@ frame_height = int(camera.get(cv2.CAP_PROP_FRAME_HEIGHT))
 fourcc = cv2.VideoWriter_fourcc(*'h264')
 output = cv2.VideoWriter('output.mp4', fourcc, 20.0, (frame_width, frame_height))
 image_num = 0
+last_save = 0
 
 #video save folder
 #SCRIPT_DIR = os.path.dirname(os.path.abspath(file))
@@ -26,9 +30,14 @@ while True:
 
     output.write(frame)
     cv2.imshow('Camera', frame) #shows each frame
-    saved_loc = os.path.join(SAVE_FOLDER, f"frame{image_num}.png")
-    cv2.imwrite(saved_loc, frame)
-    image_num += 1
+
+    current_time = time.time()
+
+    if(current_time - last_save >= 1):
+        saved_loc = os.path.join(SAVE_FOLDER, f"frame{image_num}.png")
+        cv2.imwrite(saved_loc, frame)
+        image_num += 1
+        last_save = current_time
 
     if cv2.waitKey(1)==ord('q'): # 'q' to exit loop
         break

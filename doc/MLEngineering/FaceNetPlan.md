@@ -1,9 +1,15 @@
-        Enrollment
-Images → InsightFace → Embeddings → Vector DB
+# Face Recognition Pipeline
 
-        Inference
-Camera → InsightFace → Query Embedding
-                     ↓
-           Nearest Neighbor Search
-                     ↓
-           ID or "Unknown"
+Input Image / Frame  
+↓  
+Face Detection + Alignment (InsightFace)  
+↓  
+Face Embedding Extraction (InsightFace)  
+↓  
+Embedding Normalization  
+↓  
+Similarity Search (Database / Index)  
+↓  
+Identity Decision (Thresholding)  
+↓  
+Result (Person ID or Unknown)

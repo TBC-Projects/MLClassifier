@@ -1,3 +1,4 @@
+#Load recognizer model and compare embeddings to threshold
 from backgroundprocessing import FaceRecognizer, monitor_folder
 
 recognizer = FaceRecognizer(ctx_id=0, threshold=0.6)

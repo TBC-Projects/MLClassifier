@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual environment
+.venv/
+
+# Virtual environment
+venv/
+
+# VS Code
+.vscode/
+
+# Generated files
+embeddings.npy
+
+# OS
+.DS_Store
+
+# Temp files
+tempCodeRunnerFile.py

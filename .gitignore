@@ -11,9 +11,6 @@ venv/
 # VS Code
 .vscode/
 
-# Generated files
-embeddings.npy
-
 # OS
 .DS_Store
 

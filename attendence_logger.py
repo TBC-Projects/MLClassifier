@@ -8,6 +8,7 @@ CSV_FILE = Path(__file__).parent / "attendance.csv"
 
 def log_attendance(name):
     """Log attendance with timestamp."""
+    # Creates the directory if it doesn't exist
     CSV_FILE.parent.mkdir(parents=True, exist_ok=True)
     
     timestamp = datetime.now().isoformat()
@@ -17,7 +18,9 @@ def log_attendance(name):
     
     print(f"✅ Logged: {name}")
     print(f"📁 Saved to: {CSV_FILE.absolute()}")
+    # Shows full path so user knows where file is
 
 if __name__ == "__main__":
     log_attendance("Alice")
     log_attendance("Bob")
+    # Temporary test cases

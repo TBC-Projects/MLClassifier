@@ -72,22 +72,15 @@ class FaceRecognizer:
         print(f"{'='*50}\n")
     
     def recognize_face(self, face_img):
-        """
-        Get embedding and match against database using multiple comparisons.
-        
-        Returns:
-            tuple: (name, confidence_score)
-        """
-        # Get embedding for current face
+    
+    # Get embedding for current face
         with torch.no_grad():
             face_tensor = preprocess_face(face_img, augment=False).unsqueeze(0).to(self.device)
             emb = self.model(face_tensor).cpu().numpy()[0]
         
-        best_match = "Unknown"
-        best_score = 0
-        best_match_rate = 0
-        
         # Compare with each person in database
+        scores_list = []
+        
         for person, data in self.db.items():
             # Compare with all embeddings for this person, not just mean
             embeddings = data['embeddings']
@@ -103,18 +96,40 @@ class FaceRecognizer:
             matches_above_threshold = sum(1 for s in similarities if s > self.threshold)
             match_rate = matches_above_threshold / len(similarities)
             
-            # Require both good average similarity AND good match rate
-            if avg_similarity > best_score and match_rate >= self.min_matches:
-                best_match = person
-                best_score = avg_similarity
-                best_match_rate = match_rate
+            scores_list.append({
+                'person': person,
+                'avg_sim': avg_similarity,
+                'max_sim': max_similarity,
+                'match_rate': match_rate
+            })
         
-        # Strict rejection criteria - both conditions must be met
-        if best_score < self.threshold or best_match_rate < self.min_matches:
-            best_match = "Unknown"
-            best_score = 0
+        # Sort by average similarity
+        scores_list.sort(key=lambda x: x['avg_sim'], reverse=True)
         
-        return best_match, best_score
+        # Get best and second-best
+        best = scores_list[0] if len(scores_list) > 0 else None
+        second_best = scores_list[1] if len(scores_list) > 1 else None
+        
+        if best is None:
+            return "Unknown", 0
+        
+        # Calculate margin between best and second-best
+        if second_best:
+            score_margin = best['avg_sim'] - second_best['avg_sim']
+        else:
+            score_margin = 1.0  # Only one person in database
+        
+        # Strict rejection criteria - ALL must pass:
+        # 1. Score above threshold
+        # 2. Enough matches above threshold
+        # 3. Clear margin from second place (important for similar people!)
+        if (best['avg_sim'] < self.threshold or 
+            best['match_rate'] < self.min_matches or
+            score_margin < 0.20):  # Require 0.20 gap for similar people
+            
+            return "Unknown", 0
+        
+        return best['person'], best['avg_sim']
     
     def smooth_recognition(self, face_id, name, score):
         """

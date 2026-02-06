@@ -3,8 +3,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 class FaceEmbeddingNet(nn.Module):
-    def init(self, embedding_dim=256):  # Increased from 128 to 256
-        super().init()
+    def __init__(self, embedding_dim=256):  # FIXED: Added double underscores
+        super().__init__()  # FIXED: Added double underscores
         self.conv = nn.Sequential(
             nn.Conv2d(1, 32, 3, padding=1),
             nn.BatchNorm2d(32),

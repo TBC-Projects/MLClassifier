@@ -72,8 +72,10 @@ class FaceRecognizer:
         print(f"{'='*50}\n")
     
     def recognize_face(self, face_img):
-    
-    # Get embedding for current face
+        """
+        Recognize a face by comparing against database embeddings
+        """
+        # Get embedding for current face
         with torch.no_grad():
             face_tensor = preprocess_face(face_img, augment=False).unsqueeze(0).to(self.device)
             emb = self.model(face_tensor).cpu().numpy()[0]

@@ -30,7 +30,18 @@ def augment_face(img):
     return img
 
 def preprocess_face(img, augment=False, target_size=DEFAULT_IMAGE_SIZE):
-    """Preprocess face image with optional augmentation"""
+    """
+    Preprocess face image with optional augmentation
+    
+    Args:
+        img: Grayscale image (H, W)
+        augment: Whether to apply data augmentation
+        target_size: Target size tuple (width, height)
+    
+    Returns:
+        Tensor of shape [1, H, W] (channels, height, width)
+        Note: Batch dimension will be added by DataLoader or calling code
+    """
     if img is None or img.size == 0:
         raise ValueError("Invalid image")
     
@@ -38,20 +49,29 @@ def preprocess_face(img, augment=False, target_size=DEFAULT_IMAGE_SIZE):
     if augment:
         img = augment_face(img)
     
-    # Resize to 160×160
+    # Resize to target size (default 160×160)
     img = cv2.resize(img, target_size)
     
     # Histogram equalization for better contrast
     img = cv2.equalizeHist(img)
     
-    # Normalize
+    # Normalize to [0, 1]
     img = img.astype(np.float32) / 255.0
     
-    # Convert to tensor [1, 160, 160] - only ONE unsqueeze!
+    # Convert to tensor and add channel dimension: [H, W] -> [1, H, W]
     img = torch.tensor(img, dtype=torch.float32).unsqueeze(0)
     
     return img
 
 def cosine_similarity(a, b):
-    """Compute cosine similarity between two vectors"""
+    """
+    Compute cosine similarity between two vectors
+    
+    Args:
+        a: First vector (numpy array)
+        b: Second vector (numpy array)
+    
+    Returns:
+        Similarity score between -1 and 1 (1 = identical direction)
+    """
     return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b) + 1e-8)

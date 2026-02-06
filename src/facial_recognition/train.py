@@ -94,7 +94,7 @@ def train():
     best_val_loss = float('inf')
     patience_counter = 0
     
-    for epoch in range(50):
+    for epoch in range(5):
         model.train()
         train_loss = 0
         
@@ -111,7 +111,7 @@ def train():
         avg_train_loss = train_loss / len(train_loader)
         val_loss = validate(model, val_loader, device)
         
-        print(f"Epoch {epoch+1}/50 - Train Loss: {avg_train_loss:.4f}, Val Loss: {val_loss:.4f}")
+        print(f"Epoch {epoch+1}/5 - Train Loss: {avg_train_loss:.4f}, Val Loss: {val_loss:.4f}")
         
         scheduler.step(val_loss)
         

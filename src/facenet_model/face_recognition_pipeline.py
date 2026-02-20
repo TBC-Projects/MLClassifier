@@ -2,7 +2,6 @@
 Live Facial Recognition Pipeline for NVIDIA Jetson Nano
 Using MobileFaceNet and InsightFace
 """
-
 import cv2
 import numpy as np
 from insightface.app import FaceAnalysis
@@ -11,6 +10,13 @@ import pickle
 import os
 from pathlib import Path
 import time
+import csv
+from datetime import datetime
+from pathlib import Path
+
+# Works when run as: python attendance_logger.py
+CSV_FILE = Path(__file__).parent / "attendance.csv"
+last_logged = {}
 
 class FaceRecognitionPipeline:
     def __init__(self, database_path='face_database', model_name='buffalo_sc'):
@@ -197,6 +203,9 @@ class FaceRecognitionPipeline:
                 
                 # Recognize face
                 person_name, confidence = self.recognize_face(face.embedding)
+                if confidence > 0.6:
+                    if should_log(person_name):
+                        log_attendance(person_name)
                 
                 # Draw bounding box
                 color = (0, 255, 0) if person_name != "Unknown" else (0, 0, 255)
@@ -230,6 +239,27 @@ class FaceRecognitionPipeline:
         
         cap.release()
         cv2.destroyAllWindows()
+
+
+def should_log(name):
+    now = datetime.now()
+    if name not in last_logged or (now - last_logged[name]).seconds > 60:
+        last_logged[name] = now
+        return True
+    return False
+
+def log_attendance(name):
+    """Log attendance with timestamp."""
+    CSV_FILE.parent.mkdir(parents=True, exist_ok=True)
+    
+    timestamp = datetime.now().isoformat()
+    with open(CSV_FILE, 'a', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow([timestamp, name])
+    
+    print(f"✅ Logged: {name}")
+    print(f"📁 Saved to: {CSV_FILE.absolute()}")
+
 
 
 def main():

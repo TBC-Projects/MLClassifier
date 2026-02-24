@@ -13,6 +13,7 @@ import time
 import csv
 from datetime import datetime
 from pathlib import Path
+import serial
 
 # Works when run as: python attendance_logger.py
 CSV_FILE = Path(__file__).parent / "attendance.csv"
@@ -23,6 +24,14 @@ with open("/Users/hudsonwong/Work:School/College/Boring_Club/MLClassifier/src/fa
     for row in reader:
         if row[1] not in last_logged:
             last_logged.add(row[1])
+#
+#ser = serial.Serial(
+    #port='/dev/cu.usbserial-0001',  # Change this
+    #baudrate=115200,
+    #timeout=1
+#)
+
+time.sleep(2)  # Wait for device (important for Arduino/ESP)
 
 class FaceRecognitionPipeline:
     def __init__(self, database_path='face_database', model_name='buffalo_sc'):
@@ -265,7 +274,7 @@ def log_attendance(name):
     print(f"✅ Logged: {name}")
     print(f"📁 Saved to: {CSV_FILE.absolute()}")
     last_logged.add(name)
-
+    #ser.write(b'complete')
 
 
 def main():

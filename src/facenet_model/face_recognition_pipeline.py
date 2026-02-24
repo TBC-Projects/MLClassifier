@@ -16,7 +16,13 @@ from pathlib import Path
 
 # Works when run as: python attendance_logger.py
 CSV_FILE = Path(__file__).parent / "attendance.csv"
-last_logged = {}
+last_logged = set()
+
+with open("/Users/hudsonwong/Work:School/College/Boring_Club/MLClassifier/src/facenet_model/attendance.csv", "r", newline="") as f:
+    reader = csv.reader(f)
+    for row in reader:
+        if row[1] not in last_logged:
+            last_logged.add(row[1])
 
 class FaceRecognitionPipeline:
     def __init__(self, database_path='face_database', model_name='buffalo_sc'):
@@ -243,10 +249,9 @@ class FaceRecognitionPipeline:
 
 def should_log(name):
     now = datetime.now()
-    if name not in last_logged or (now - last_logged[name]).seconds > 60:
-        last_logged[name] = now
-        return True
-    return False
+    if name in last_logged:
+        return False
+    return True
 
 def log_attendance(name):
     """Log attendance with timestamp."""
@@ -259,6 +264,7 @@ def log_attendance(name):
     
     print(f"✅ Logged: {name}")
     print(f"📁 Saved to: {CSV_FILE.absolute()}")
+    last_logged.add(name)
 
 
 

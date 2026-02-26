@@ -13,6 +13,17 @@ import time
 import csv
 from datetime import datetime
 from pathlib import Path
+import serial
+
+SERIAL_PORT = "/dev/ttyUSB0"  # CHANGE THIS
+BAUDRATE = 9600
+
+try:
+    ser = serial.Serial(SERIAL_PORT, BAUDRATE, timeout=1)
+    print(f"Serial port connected")
+except Exception as e:
+    print(f"Failed connection")
+    ser = None
 
 # Works when run as: python attendance_logger.py
 CSV_FILE = Path(__file__).parent / "attendance.csv"
@@ -254,7 +265,7 @@ def should_log(name):
     return True
 
 def log_attendance(name):
-    """Log attendance with timestamp."""
+    """Log attendance with timestamp and send signal over serial."""
     CSV_FILE.parent.mkdir(parents=True, exist_ok=True)
     
     timestamp = datetime.now().isoformat()
@@ -262,9 +273,15 @@ def log_attendance(name):
         writer = csv.writer(f)
         writer.writerow([timestamp, name])
     
-    print(f"✅ Logged: {name}")
-    print(f"📁 Saved to: {CSV_FILE.absolute()}")
-    last_logged.add(name)
+    print(f"Logged: {name}")
+    print(f"Saved to: {CSV_FILE.absolute()}")
+    
+    # Send over serial if available
+    if ser is not None:
+        try:
+            ser.write("complete")
+        except Exception as e:
+            print(f"Serial write failed")
 
 
 

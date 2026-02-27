@@ -1,0 +1,76 @@
+// ultrasonic sensor pins
+#define TRIG_PIN 9
+#define ECHO_PIN 10
+
+// RGB LED pins
+#define RED_PIN   3
+#define GREEN_PIN 5
+#define BLUE_PIN  6
+
+const int TO_CLOSE_VALUE = 5;
+const int BAD_VALUE = 30;
+
+void setup() {
+  // ultrasonic sensor setup
+  pinMode(TRIG_PIN, OUTPUT);
+  pinMode(ECHO_PIN, INPUT);
+
+  // RGB LED setup
+  pinMode(RED_PIN, OUTPUT);
+  pinMode(GREEN_PIN, OUTPUT);
+  pinMode(BLUE_PIN, OUTPUT);
+
+  Serial.begin(115200);
+}
+//main loop
+void loop() {
+  //time for echo to return (microseconds)
+  long duration; 
+  //distance in inches
+  float inches; 
+
+  digitalWrite(TRIG_PIN, LOW);
+  delayMicroseconds(2);
+
+  digitalWrite(TRIG_PIN, HIGH);
+  delayMicroseconds(10);
+
+  digitalWrite(TRIG_PIN, LOW);
+
+  //get time from transceiver to receiver. 
+  duration = pulseIn(ECHO_PIN, HIGH);
+  //get inches (ie the distance between the sensor and the object)
+  inches = getDistanceInInches(duration);
+
+  if (inches >= BAD_VALUE) {
+    Serial.println("ABSENT");
+    //red
+    setColor(255, 0, 0);
+  }
+  else if (inches <= TO_CLOSE_VALUE) {
+    Serial.println("ABSENT");
+    //red
+    setColor(255, 0, 0); 
+  else {
+    Serial.println("PRESENT");
+    //green
+    setColor(0, 255, 0);  
+  }
+  //sampling delay
+  delay(200); 
+}
+
+//set the colors for the 4 pin LED
+void setColor(int red, int green, int blue) {
+  analogWrite(RED_PIN, red);
+  analogWrite(GREEN_PIN, green);
+  analogWrite(BLUE_PIN, blue);
+}
+
+//helper method to calculate distance in inches
+float getDistanceInInches(long duration){
+   // Convert time to distance
+  float distance = duration * 0.034 / 2;   // cm
+  float inches = distance / 2.54;    // inches
+  return inches;
+}

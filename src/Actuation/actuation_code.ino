@@ -49,9 +49,13 @@ void loop() {
 }
 
 void playsound() {
-  digitalWrite(BUZZER_PIN, HIGH);
-  delay(1000);              // 1 second
-  digitalWrite(BUZZER_PIN, LOW);
+  // digitalWrite(BUZZER_PIN, HIGH);
+  // delay(1000);              // 1 second
+  // digitalWrite(BUZZER_PIN, LOW);
+  tone(BUZZER_PIN, 1200, 130);
+  delay(160);
+  tone(BUZZER_PIN, 2000, 400);
+  delay (840);
 }
 
   // Check if the Jetson Nano has sent a new command

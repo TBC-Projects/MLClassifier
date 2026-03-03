@@ -32,53 +32,30 @@ void setup() {
 }
 
 void loop() {
-  // 1. Not processing
-  Serial.println("Color: RED");
-  setColor(255, 0, 0);
-  delay(1000);
+  if (Serial.available())
+  {
+    String input = Serial.readStringUntil('\n');
+    input.trim();
 
-  // 2. Processing
-  Serial.println("Color: YELLOW");
-  setColor(255, 255, 0);
-  delay(1000);
-
-  // 3. Processed
-  Serial.println("Color: GREEN");
-  setColor(0, 255, 0);
-  playsound();
+    if (input == "NO")
+    {
+      setColor(255, 0, 0);
+    }
+    else if (input == "PROCESSING")
+    {
+      setColor(255, 255, 0);
+    }
+    else if (input == "COMPLETE")
+    {
+      setColor(0, 255, 0);
+      playsound();
+    }
+  }
 }
 
 void playsound() {
-  // digitalWrite(BUZZER_PIN, HIGH);
-  // delay(1000);              // 1 second
-  // digitalWrite(BUZZER_PIN, LOW);
   tone(BUZZER_PIN, 1200, 130);
   delay(160);
   tone(BUZZER_PIN, 2000, 400);
   delay (840);
 }
-
-  // Check if the Jetson Nano has sent a new command
-  // if (Serial.available() > 0) {
-  //   String command = Serial.readStringUntil('\n');
-  //   command.trim(); 
-  //   command.toLowerCase(); // Handle "Red" or "RED" gracefully
-
-  //   if (command == "red") {
-  //     setColor(255, 0, 0);
-  //   } else if (command == "green") {
-  //     setColor(0, 255, 0);
-  //   } else if (command == "blue") {
-  //     setColor(0, 0, 255);
-  //   } else if (command == "off") {
-  //     setColor(0, 0, 0);
-  //   } else if (command == "white") {
-  //     setColor(255, 255, 255);
-  //   }
-  //   else if (command == "yellow")
-  //   {
-  //     setColor (255, 255, 0);
-  //   }
-  //   // If command is unrecognized, the LED simply stays at its current color
-  // }
-// }

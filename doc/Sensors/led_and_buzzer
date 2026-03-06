@@ -1,0 +1,51 @@
+#define RED_PIN 4
+#define GREEN_PIN 5
+#define BLUE_PIN 6
+#define BUZZER_PIN 9
+
+void setColor(int r, int g, int b) {
+  analogWrite(RED_PIN, r);
+  analogWrite(GREEN_PIN, g);
+  analogWrite(BLUE_PIN, b);
+}
+
+void setup() {
+  Serial.begin(115200);
+  delay(2000);
+
+  pinMode(RED_PIN, OUTPUT);
+  pinMode(GREEN_PIN, OUTPUT);
+  pinMode(BLUE_PIN, OUTPUT);
+  pinMode(BUZZER_PIN, OUTPUT);
+
+  //comment out when testing with software team
+  Serial.println("System Initialized");
+}
+
+void loop() {
+  if (Serial.available()) {
+
+    String input = Serial.readStringUntil('\n');
+    input.trim();
+    //comment out when testing with software team
+    Serial.println("Received: " + input);
+
+    if (input == "NO") {
+      setColor(255, 0, 0);
+    }
+    else if (input == "PROCESSING") {
+      setColor(255, 255, 0);
+    }
+    else if (input == "COMPLETE") {
+      setColor(0, 255, 0);
+      playsound();
+    }
+  }
+}
+//helper method to turn buzzer on and off.
+void playsound() {
+  tone(BUZZER_PIN, 1200, 130);
+  delay(160);
+  tone(BUZZER_PIN, 2000, 400);
+  delay(840);
+}

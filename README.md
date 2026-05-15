@@ -13,34 +13,36 @@ This report serves two primary functions:
 * Project Title:  Facial Recognition Attendance Checker
 * Project Purpose: Design and build an embedded system that uses a ML classification algorithm to do real-time image processing. 
 * Brief Description:  An embedded system that scans faces in real-time, uses classification to match the face to a person, and marks a person as present. Incorporates user feedback via lights and audio.
-* Contributors Involved: Sam Mansouri, \[documentation focals add your name here as you make edits!\]
+* Contributors Involved: Sam Mansouri
 
 ## Accomplishments
 
-* Deliverables:  
-* Outcome:
+* Deliverables:  Embedded system device with camera running realtime object tracking and facial recognition with attendance logging.
+* Outcome: Successful implementation of device. Pending PCB integration.
 
 ## Challenges Faced
 
-* Challenge Description  
-  * Solution  
-  * Lesson Learned  
-* Challenge 2 Description  
-  * Solution  
-  * Lesson Learned
+* Transmission protocol needed between ESP32 and PC  
+  * Solution: Use serial communication 
+  * Lesson Learned: design a data pipeline during planning phase  
+* Challenge 2 Description: Jetson Nano cannot be imaged
+  * Solution: Give to Leonard
+  * Lesson Learned: Ensure flash memory (microSD Card) does not have prohibitive technical limitations
 
 ## Potential Improvements
 
-* Potential improvements, next steps
+* Automated device waking
+* PCB integration (delivered but not implemented)
+* 3D printed chassis (designed but having printing issues)
 
 ## Relevant Resources \[\*\*IMPORTANT\]**
 
 * Key files, photos, figures, algorithms  
 * Software/platforms used, and their purpose  
-  * Numpy:
-  * Pandas:
-  * Jetson Orin Nano:  
-  * Jetpack 9
+  * Numpy: Mathmatical operations on python
+  * Pandas: Large scale data operations on python
+  * Jetson Orin Nano: Running real-time object tracking and facial recognition classification model
+  * Jetpack 9: Operating system for Jetson platform power computing
 * Languages used:  
   * Python
   * C
@@ -57,11 +59,11 @@ This report serves two primary functions:
     * Software Lead  
   * Akshay Ashok  
     * Machine Learning Lead
+  * Andrew Bechtel
+    * Systems Lead
   * Sam Mansouri
     * Hardware Lead
   * Cliff Pham  
-    * Lead Support
-  * Sean Bubernak  
     * Lead Support
   * Arjun Manu
     * Lead Support
